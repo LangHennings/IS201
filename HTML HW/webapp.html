@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 100px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .too-high, .too-low {
+            color: red;
+        }
+        .attempts {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .reset {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .reset:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess the number between 1 and 100!</p>
+        <input type="number" id="guess" min="1" max="100" placeholder="Enter a number">
+        <button onclick="checkGuess()">Guess</button>
+        <div class="message" id="message"></div>
+        <div class="attempts" id="attempts"></div>
+        <button class="reset" id="resetButton" style="display: none;" onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        let randomNumber;
+        let attempts = 0;
+
+        // Initialize game
+        function startGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById("message").innerHTML = "";
+            document.getElementById("attempts").innerHTML = "";
+            document.getElementById("guess").value = "";
+            document.getElementById("resetButton").style.display = "none";
+        }
+
+        // Check the user's guess
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById("guess").value);
+            if (isNaN(userGuess)) {
+                document.getElementById("message").innerHTML = "Please enter a valid number.";
+                return;
+            }
+
+            attempts++;
+
+            if (userGuess === randomNumber) {
+                document.getElementById("message").innerHTML = "Correct! You guessed the number.";
+                document.getElementById("message").classList.add("correct");
+                document.getElementById("attempts").innerHTML = `You took ${attempts} attempt${attempts > 1 ? 's' : ''}.`;
+                document.getElementById("resetButton").style.display = "block";
+            } else if (userGuess > randomNumber) {
+                document.getElementById("message").innerHTML = "Too high! Try again.";
+                document.getElementById("message").classList.add("too-high");
+            } else {
+                document.getElementById("message").innerHTML = "Too low! Try again.";
+                document.getElementById("message").classList.add("too-low");
+            }
+
+            document.getElementById("attempts").innerHTML = `Attempts: ${attempts}`;
+        }
+
+        // Reset the game
+        function resetGame() {
+            startGame();
+        }
+
+        // Start a new game when the page loads
+        window.onload = startGame;
+    </script>
+</body>
+</html>

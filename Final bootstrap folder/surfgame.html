@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WSL Surfing Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+        }
+        .attempts {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #555;
+        }
+        .reset {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .reset:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>WSL Surfing Trivia</h1>
+        <p>Guess the answer to the surfing trivia question:</p>
+        <p id="question"></p>
+        <input type="text" id="answer" placeholder="Enter your guess">
+        <button onclick="checkAnswer()">Submit</button>
+        <div class="message" id="message"></div>
+        <div class="attempts" id="attempts"></div>
+        <button class="reset" id="resetButton" style="display: none;" onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        // Trivia questions and answers
+        const trivia = [
+            {
+                question: "Who won the 2023 WSL Championship Tour?",
+                answer: "Jack Robinson"
+            },
+            {
+                question: "Where is the famous Pipeline surf break located?",
+                answer: "Hawaii"
+            },
+            {
+                question: "Who is known as the 'King of Pipeline'?",
+                answer: "John John Florence"
+            },
+            {
+                question: "Which surf event is held in Australia and is the first stop of the WSL Championship Tour?",
+                answer: "Gold Coast Pro"
+            },
+            {
+                question: "Which female surfer won the 2022 WSL Championship?",
+                answer: "Stephanie Gilmore"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let attempts = 0;
+
+        // Initialize game
+        function startGame() {
+            currentQuestionIndex = 0;
+            attempts = 0;
+            document.getElementById("message").innerHTML = "";
+            document.getElementById("attempts").innerHTML = "";
+            document.getElementById("answer").value = "";
+            document.getElementById("resetButton").style.display = "none";
+            displayQuestion();
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = trivia[currentQuestionIndex].question;
+            document.getElementById("question").innerText = question;
+        }
+
+        // Check the user's answer
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            const correctAnswer = trivia[currentQuestionIndex].answer.toLowerCase();
+
+            if (!userAnswer) {
+                document.getElementById("message").innerText = "Please enter a guess!";
+                return;
+            }
+
+            attempts++;
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById("message").innerHTML = "Correct! You got it right!";
+                document.getElementById("message").classList.add("correct");
+                document.getElementById("attempts").innerText = `You took ${attempts} attempt${attempts > 1 ? 's' : ''}.`;
+                document.getElementById("resetButton").style.display = "block";
+            } else {
+                document.getElementById("message").innerHTML = "Incorrect. Try again!";
+                document.getElementById("message").classList.add("incorrect");
+            }
+
+            document.getElementById("attempts").innerText = `Attempts: ${attempts}`;
+        }
+
+        // Reset the game
+        function resetGame() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= trivia.length) {
+                currentQuestionIndex = 0;
+                alert("You've answered all questions! Starting over.");
+            }
+            startGame();
+        }
+
+        // Start the game when the page loads
+        window.onload = startGame;
+    </script>
+</body>
+</html>
